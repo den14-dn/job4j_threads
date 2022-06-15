@@ -11,10 +11,8 @@ public class ThreadState {
         System.out.println(first.getState());
         first.start();
         second.start();
-        while (first.getState() != Thread.State.TERMINATED) {
-            System.out.println(first.getState());
-        }
-        while (second.getState() != Thread.State.TERMINATED) {
+        while (first.getState() != Thread.State.TERMINATED
+                && second.getState() != Thread.State.TERMINATED) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
