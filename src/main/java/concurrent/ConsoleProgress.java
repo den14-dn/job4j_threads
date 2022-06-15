@@ -11,7 +11,7 @@ public class ConsoleProgress implements Runnable {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
-                break;
+                Thread.currentThread().interrupt();
             }
             index = ++index < process.length ? index : 0;
         }
