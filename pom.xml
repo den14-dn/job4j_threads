@@ -6,6 +6,14 @@
 
     <groupId>org.job4j</groupId>
     <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>net.jcip</groupId>
+            <artifactId>jcip-annotations</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
     <artifactId>job4j_threads</artifactId>
     <version>1.0-SNAPSHOT</version>
     <build>
