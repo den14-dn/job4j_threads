@@ -27,8 +27,8 @@ public class UserStorage {
         boolean rst = false;
         User fromUser = users.get(fromId);
         User toUser = users.get(toId);
-        if (fromUser != null && toUser != null &&
-                fromUser.getAmount() >= amount) {
+        if (fromUser != null && toUser != null
+                && fromUser.getAmount() >= amount) {
             fromUser.setAmount(toUser.getAmount() - amount);
             toUser.setAmount(toUser.getAmount() + amount);
             rst = true;
