@@ -2,9 +2,8 @@ package wait;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -75,13 +74,13 @@ public class SimpleBlockingQueueTest {
     }
 
     @Test
-    public void when() throws InterruptedException {
-        List<Integer> rst = new ArrayList<>();
+    public void whenConsumerBreakTheadAfterOfProducer() throws InterruptedException {
+        CopyOnWriteArrayList<Integer> rst = new CopyOnWriteArrayList<>();
         SimpleBlockingQueue<Integer> simpleQueue = new SimpleBlockingQueue<>(5);
 
         Thread producer = new Thread(
                 () -> {
-                    for (int i = 0; i < 5; i++) {
+                    for (int i = 0; i < 3; i++) {
                         try {
                             simpleQueue.offer(i);
                         } catch (InterruptedException e) {
@@ -91,23 +90,62 @@ public class SimpleBlockingQueueTest {
                 });
         Thread consumer = new Thread(
                 () -> {
-                    while (!simpleQueue.isEmpty()) {
-                        int value = 0;
+                    while (!simpleQueue.isEmpty() || !Thread.currentThread().isInterrupted()) {
                         try {
-                            value = simpleQueue.poll();
+                            rst.add(simpleQueue.poll());
                         } catch (InterruptedException e) {
                             e.printStackTrace();
+                            Thread.currentThread().interrupt();
                         }
-                        rst.add(value);
                     }
                 });
         producer.start();
         consumer.start();
 
         producer.join();
+        consumer.interrupt();
         consumer.join();
 
-        assertThat(rst, is(Arrays.asList(0, 1, 2, 3, 4)));
+        assertThat(rst, is(Arrays.asList(0, 1, 2)));
     }
 
+    @Test
+    public void whenFetchAllThenGetIt() throws InterruptedException {
+        final CopyOnWriteArrayList<Integer> buffer = new CopyOnWriteArrayList<>();
+        final SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(5);
+
+        Thread producer = new Thread(
+                () -> {
+                    for (int i = 0; i < 5; i++) {
+                        try {
+                            queue.offer(i);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+        );
+        producer.start();
+
+        Thread consumer = new Thread(
+                () -> {
+                    while (!queue.isEmpty() || !Thread.currentThread().isInterrupted()) {
+                        try {
+                            buffer.add(queue.poll());
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+                }
+        );
+        consumer.start();
+
+        producer.join();
+
+        consumer.interrupt();
+        consumer.join();
+
+        assertThat(buffer, is(Arrays.asList(0, 1, 2, 3, 4)));
+    }
 }
