@@ -16,12 +16,20 @@ public class SimpleBlockingQueueTest {
 
         Thread producer = new Thread(
                 () -> {
-                    simpleQueue.offer(3);
-                    simpleQueue.offer(5);
+                    try {
+                        simpleQueue.offer(3);
+                        simpleQueue.offer(5);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 });
         Thread consumer = new Thread(
                 () -> {
-                    simpleQueue.poll();
+                    try {
+                        simpleQueue.poll();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 });
         producer.start();
         consumer.start();
@@ -40,12 +48,20 @@ public class SimpleBlockingQueueTest {
 
         Thread producer = new Thread(
                 () -> {
-                    simpleQueue.offer(3);
-                    simpleQueue.offer(5);
+                    try {
+                        simpleQueue.offer(3);
+                        simpleQueue.offer(5);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 });
         Thread consumer = new Thread(
                 () -> {
-                    simpleQueue.poll();
+                    try {
+                        simpleQueue.poll();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 });
         producer.start();
         consumer.start();
@@ -66,13 +82,22 @@ public class SimpleBlockingQueueTest {
         Thread producer = new Thread(
                 () -> {
                     for (int i = 0; i < 5; i++) {
-                        simpleQueue.offer(i);
+                        try {
+                            simpleQueue.offer(i);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
         Thread consumer = new Thread(
                 () -> {
                     while (!simpleQueue.isEmpty()) {
-                        int value = simpleQueue.poll();
+                        int value = 0;
+                        try {
+                            value = simpleQueue.poll();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         rst.add(value);
                     }
                 });
