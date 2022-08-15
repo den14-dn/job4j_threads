@@ -3,7 +3,7 @@ package pool;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 
-public class ParallelSearchIndex<T> extends RecursiveTask<int> {
+public class ParallelSearchIndex<T> extends RecursiveTask<Integer> {
     private final T[] array;
     private final int from;
     private final int to;
@@ -19,7 +19,7 @@ public class ParallelSearchIndex<T> extends RecursiveTask<int> {
     }
 
     @Override
-    protected int compute() {
+    protected Integer compute() {
         if ((to - from) <= SIZE_FOR_SEQUENTIAL_SEARCH) {
             return sequentialSearch();
         }
@@ -34,8 +34,8 @@ public class ParallelSearchIndex<T> extends RecursiveTask<int> {
         return Math.max(leftPartOfArray.join(), rightPartOfArray.join());
     }
 
-    private int sequentialSearch() {
-        int rst = -1;
+    private Integer sequentialSearch() {
+        Integer rst = -1;
         for (int i = from; i < to; i++) {
             if (elementOfSearch.equals(array[i])) {
                 rst = i;
