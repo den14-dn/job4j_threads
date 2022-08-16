@@ -35,7 +35,7 @@ public class ParallelSearchIndex<T> extends RecursiveTask<Integer> {
     }
 
     private Integer sequentialSearch() {
-        Integer rst = -1;
+        int rst = -1;
         for (int i = from; i < to; i++) {
             if (elementOfSearch.equals(array[i])) {
                 rst = i;
@@ -45,7 +45,7 @@ public class ParallelSearchIndex<T> extends RecursiveTask<Integer> {
         return rst;
     }
 
-    public int search(T[] array, T value) {
+    public static <T> int search(T[] array, T value) {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         return (int) forkJoinPool.invoke(new ParallelSearchIndex(array, 0, array.length - 1, value));
     }
