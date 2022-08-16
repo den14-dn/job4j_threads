@@ -46,8 +46,7 @@ public class ParallelSearchIndexTest {
                 new User("Пользователь11", "user11@mail.com"),
                 new User("Пользователь12", "user12@mail.com"),
                 new User("Пользователь13", "user13@mail.com"),
-                model,
-                new User("Пользователь15", "user15@mail.com")
+                model
         };
         int rst = ParallelSearchIndex.search(users, model);
         assertThat(rst, is(13));
